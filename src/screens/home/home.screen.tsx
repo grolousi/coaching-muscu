@@ -10,16 +10,24 @@ import { ExoContext } from '../../shared/contexts/exo.context';
 
 export const HomeScreen: FC = () => {
   const { exoSettings } = useContext(ExoContext);
+  const aggregatedExo = exercises.map((exo) => {
+    const settings = exoSettings.find((s) => s.id === exo.id);
+    return {
+      ...exo,
+      settings
+    };
+  });
   const navigate = useNavigate();
   return (
     <Flex flexDir="column" h="100%" w="100%" px="1.5em">
       <HomeHeader />
       <Flex mt="1rem" w="100%" justifyContent="center">
         <Flex flexDir="column" w="100%">
-          {exercises.map((exo) => {
-            const settings = exoSettings.find((s) => s.id === exo.id);
+          {aggregatedExo.map((exo) => {
+            const settings = exo.settings;
             return (
               <ExcercisesCard
+                obj={settings?.obj}
                 nbSessions={settings?.sessions?.length || 0}
                 key={`exo-${exo.id}`}
                 title={exo.name}

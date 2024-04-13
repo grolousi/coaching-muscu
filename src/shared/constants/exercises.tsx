@@ -1,3 +1,5 @@
+import { ExoType } from '../types/exo.types';
+
 export const exercises = [
   {
     id: 'benchPress',
@@ -57,4 +59,5 @@ export const exercises = [
   }
 ];
 
-export const getExo = (id: string) => exercises.find((exo) => exo.id === id);
+export const getExo = (id: string): ExoType | undefined =>
+  exercises.find((exo) => exo.id === id);
