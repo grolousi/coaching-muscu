@@ -1,9 +1,10 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Flex, Heading, IconButton } from '@chakra-ui/react';
+import { Flex, FlexProps, Heading, IconButton } from '@chakra-ui/react';
+import { FC } from 'react';
 
-export const HomeHeader = () => {
+export const HomeHeader: FC<FlexProps> = ({ ...rest }) => {
   return (
-    <Flex w="100%" py="1rem" justifyContent="space-between">
+    <Flex w="100%" py="1rem" justifyContent="space-between" {...rest}>
       <Heading>Exercises</Heading>
       <IconButton
         borderRadius="5px"

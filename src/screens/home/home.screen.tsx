@@ -19,16 +19,16 @@ export const HomeScreen: FC = () => {
   });
   const navigate = useNavigate();
   return (
-    <Flex flexDir="column" h="100%" w="100%" px="1.5em">
-      <HomeHeader />
-      <Flex mt="1rem" w="100%" justifyContent="center">
+    <Flex flexDir="column" h="100%" w="100%">
+      <HomeHeader px="1.5em" />
+      <Flex px="1.5em" mt="1rem" w="100%" justifyContent="center">
         <Flex flexDir="column" w="100%">
           {aggregatedExo.map((exo) => {
             const settings = exo.settings;
             return (
               <ExcercisesCard
-                obj={settings?.obj}
-                nbSessions={settings?.sessions?.length || 0}
+                obj={settings?.obj ?? 0}
+                sessions={settings?.sessions}
                 key={`exo-${exo.id}`}
                 title={exo.name}
                 onClick={() => navigate(`/exo/${exo.id}`)}

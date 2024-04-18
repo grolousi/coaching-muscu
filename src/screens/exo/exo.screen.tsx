@@ -1,8 +1,11 @@
 import {
   Button,
+  Card,
+  CardBody,
   Flex,
   Heading,
   IconButton,
+  Stack,
   Text,
   useDisclosure
 } from '@chakra-ui/react';
@@ -13,6 +16,7 @@ import { ArrowBackIcon, CloseIcon } from '@chakra-ui/icons';
 import { ExoContext } from '../../shared/contexts/exo.context';
 import { ExoScreenInitModal } from './components/exo-init-modal';
 import { ExercicesSettingsTypes, ExoType } from '../../shared/types/exo.types';
+import dayjs from 'dayjs';
 
 const getSetObj =
   ({
@@ -32,6 +36,10 @@ const getSetObj =
       if (!prev || prev.length === 0) {
         return [{ id: exo?.id ?? '', obj: nbObj, sessions: [] }];
       }
+
+      if (!prev.find((s) => s.id === exo?.id)) {
+        return [...prev, { id: exo?.id ?? '', obj: nbObj, sessions: [] }];
+      }
       return prev.map((s) => {
         if (s.id === exo?.id) {
           return { ...s, obj: nbObj };
@@ -48,11 +56,6 @@ export const ExoScreen: FC = () => {
   const navigate = useNavigate();
   const { exoSettings, setExoSettings } = useContext(ExoContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const {
-  //   isOpen: isOpenModalSession,
-  //   onOpen: onOpenModalSession,
-  //   onClose: onCloseModalSession
-  // } = useDisclosure();
 
   useEffect(() => {
     if (!exo) {
@@ -119,10 +122,7 @@ export const ExoScreen: FC = () => {
         onClose={!current || current.obj === 0 ? () => navigate(-1) : onClose}
         onClick={setOBJ}
       />
-      {/* <ExoScreenAddSessionsModal
-        isOpen={isOpenModalSession}
-        onClose={onCloseModalSession}
-      /> */}
+
       <Flex flexDir="column" h="100%" w="100%" px="1.5em">
         <Flex alignItems="center" py="1rem">
           <ArrowBackIcon
@@ -144,15 +144,29 @@ export const ExoScreen: FC = () => {
               ) : (
                 <Flex w="100%" flexDir="column">
                   {current.sessions.map((s) => (
-                    <Flex alignItems="center" key={`session-${s.date}`}>
-                      <Text>{s.date}</Text>
-                      <Text>{s.max}</Text>
-                      <IconButton
-                        onClick={() => deleteSession(s.id)}
-                        aria-label="Supprimer session"
-                        icon={<CloseIcon />}
-                      />
-                    </Flex>
+                    <Card
+                      onClick={() => navigate(`session/${s.id}`)}
+                      cursor="pointer"
+                      key={`session-${s.date}`}
+                    >
+                      <Stack>
+                        <CardBody>
+                          <Flex
+                            alignItems="center"
+                            justifyContent={'space-between'}
+                          >
+                            <Text>{dayjs(s.date).format('DD/MM/YYYY')}</Text>
+                            <Text>{`Max: ${s.max} kg`}</Text>
+                            <IconButton
+                              onClick={() => deleteSession(s.id)}
+                              aria-label="Supprimer session"
+                              w="30px"
+                              icon={<CloseIcon boxSize="20px" />}
+                            />
+                          </Flex>
+                        </CardBody>
+                      </Stack>
+                    </Card>
                   ))}
                 </Flex>
               )}

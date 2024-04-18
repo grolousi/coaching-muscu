@@ -9,6 +9,7 @@ import { ExoScreen } from './screens/exo/exo.screen';
 import { useEffect, useState } from 'react';
 import { ExercicesSettingsTypes } from './shared/types/exo.types';
 import { ExoContext } from './shared/contexts/exo.context';
+import { SessionScreen } from './screens/session/session.screen';
 
 const getStorage = () => {
   const storage = localStorage.getItem('exoSettings');
@@ -25,7 +26,7 @@ const App = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       localStorage.setItem('exoSettings', JSON.stringify(exoSettings));
-    }, 1000);
+    }, 5000);
     return () => clearInterval(intervalId);
   });
 
@@ -34,6 +35,7 @@ const App = () => {
       <>
         <Route index element={<HomeScreen />} />
         <Route path="/exo/:id" element={<ExoScreen />} />
+        <Route path="/exo/:id/session/:sessionId" element={<SessionScreen />} />
       </>
     ),
     {
